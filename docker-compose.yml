@@ -1,0 +1,77 @@
+version: '2'
+
+services:
+
+ postgres:
+  image: postgres:latest
+  restart: always
+  volumes:
+   - ./data/postgresdb:/var/lib/postgresdb
+  expose:
+   - '5432'
+  ports:
+   - '5432:5432'
+  environment:
+    POSTGRES_USER: bitcloset
+    POSTGRES_PASSWORD: password
+
+ pgadmin4:
+  image: fenglc/pgadmin4
+  ports:
+   - "5050:5050"
+  links:
+   - postgres:postgres
+  environment:
+    POSTGRES_USER: bitcloset
+    POSTGRES_PASSWORD: password
+  depends_on:
+   - postgres
+
+ redis:
+  image: grokzen/redis-cluster:3.0.6
+  restart: always
+  volumes:
+   - ./data/redis:/var/lib/redis
+  ports:
+   - '7000:7000'
+   - '7001:7001'
+   - '7002:7002'
+   - '7003:7003'
+   - '7004:7004'
+   - '7005:7005'
+   - '7006:7006'
+   - '7007:7007'
+  expose:
+   - '7000'
+   - '7001'
+   - '7002'
+   - '7003'
+   - '7004'
+   - '7005'
+   - '7006'
+   - '7007'
+
+ bc:
+  build:
+   context: ./
+   dockerfile: Dockerfile
+  restart: always
+  depends_on:
+   - postgres
+   - redis
+  environment:
+   BITCLOSET_DATABASE_HOST: postgres
+   BITCLOSET_DATABASE_USER: bitcloset
+   BITCLOSET_DATABASE_PASSWORD: password
+   BITCLOSET_REDIS_ADDRESS: "redis:7001,redis:7002,redis:7003,redis:7004,redis:7005,redis:7006,redis:7007"
+   BITCLOSET_REDIS_PUBSUB_ADDRESS: redis:7001
+   BITCLOSET_JWT_KEY: pandapandapanda
+   VIRTUAL_HOST: api.bitcloset.dev
+   VIRTUAL_PORT: 5000
+  links:
+   - postgres:postgres
+  expose:
+   - '80'
+  ports:
+   - '80:80'
+  command: "bash -c 'sleep 3 && pwd && ls -lF && ./bin/run-test.sh'"

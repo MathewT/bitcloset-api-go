@@ -32,7 +32,7 @@ ___.   .__  __         .__                       __                          .__
 
 // BitClosetIndex returns the index for the bitcloset resource
 func BitClosetIndex(c *gin.Context) {
-	c.String(200, "hello")
+	c.String(200, "hello\n")
 
 }
 
@@ -54,11 +54,7 @@ func main() {
 		log.SetLevel(log.DebugLevel)
 	}
 
-	if *argLogJSON {
-		log.SetFormatter(&log.JSONFormatter{})
-	} else {
-		log.SetFormatter(&log.TextFormatter{FullTimestamp: true})
-	}
+	log.SetFormatter(&log.JSONFormatter{})
 
 	router := gin.Default()
 	v1 := router.Group("/api/v1/bitcloset")

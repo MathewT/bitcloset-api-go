@@ -20,5 +20,5 @@ docker run -it bitcloset-api-go
 ```
 
 ```bash 
-curl -XGET -d '{"color":"green","message":"Test from Mathew"}' -H 'Content-Type: application/json' http://172.17.0.2:8000/api/v1/bitcloset/
+curl -XGET -d '{"color":"green","message":"Test from Mathew"}' -H 'Content-Type: application/json' http://172.19.0.4:80/api/v1/bitcloset/
 ```

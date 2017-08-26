@@ -11,8 +11,7 @@ COPY . /app
 
 WORKDIR /app
 
-
-EXPOSE 8000
+EXPOSE 80
 ## RUN chmod ugo+rx /app/run-test.sh
 ## CMD sleep 30m
 ## CMD ["./bin/bitcloset-api-go"]
